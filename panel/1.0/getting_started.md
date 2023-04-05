@@ -87,9 +87,12 @@ curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/loca
 ## Download Files
 
 The first step in this process is to create the folder where the panel will live and then move ourselves into that
-newly created folder. Below is an example of how to perform this operation.
+newly created folder. Make sure you are running the commands as root user (sudo su -). Below is an example of how to perform this operation.
 
 ``` bash
+# Starting by changing to root user
+sudo su - 
+
 mkdir -p /var/www/pterodactyl
 cd /var/www/pterodactyl
 ```
@@ -127,7 +130,7 @@ exit
 :::
 
 First we will copy over our default environment settings file, install core dependencies, and then generate a
-new application encryption key.
+new application encryption key. 
 
 ``` bash
 cp .env.example .env
@@ -137,6 +140,11 @@ composer install --no-dev --optimize-autoloader
 # the first time and do not have any Pterodactyl Panel data in the database.
 php artisan key:generate --force
 ```
+
+::: warning Composer warning
+While executing this code, composer will probably warn you about running as **root**. 
+This should be **ignored** as we later on change the folder permissions to meet security stardards.
+:::
 
 ::: danger
 Back up your encryption key (APP_KEY in the `.env` file). It is used as an encryption key for all data that needs to be stored securely (e.g. api keys).
